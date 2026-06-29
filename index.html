@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>🎮 遊戲樂園 — Game Hub</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;min-height:100%;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);font-family:'Segoe UI',Arial,'Noto Sans HK',sans-serif;touch-action:manipulation;overflow-x:hidden}
+
+/* ===== HEADER ===== */
+.header-wrap{text-align:center;padding:clamp(20px,5vw,48px) 16px clamp(8px,2vw,16px)}
+.header-icon{font-size:clamp(48px,12vw,80px);display:block;margin-bottom:4px;animation:float 2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.header-h1{font-size:clamp(28px,7vw,48px);color:#e2b714;font-weight:900;text-shadow:2px 2px 0 #8b6914,0 0 30px rgba(226,183,20,.2);letter-spacing:2px}
+.header-sub{font-size:clamp(13px,3vw,18px);color:#8888cc;margin-top:4px}
+
+/* ===== GAME GRID ===== */
+.grid-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:clamp(10px,2.5vw,18px);padding:8px 16px 24px;max-width:600px;margin:0 auto;width:100%}
+
+/* ===== GAME CARD ===== */
+.game-card{display:flex;flex-direction:column;align-items:center;padding:clamp(14px,3.5vw,24px) clamp(10px,2vw,16px);border-radius:20px;cursor:pointer;transition:.25s;position:relative;overflow:hidden;min-height:clamp(140px,35vw,200px)}
+.game-card:active{transform:scale(0.94)}
+.game-card.wide{grid-column:1/-1;flex-direction:row;gap:clamp(12px,3vw,20px);padding:clamp(12px,3vw,20px);min-height:auto;justify-content:center}
+
+/* Card Themes */
+.card-bonds{background:linear-gradient(135deg,#fff7e6,#ffcc80);box-shadow:0 6px 20px rgba(255,152,0,.25)}
+.card-minecraft{background:linear-gradient(135deg,#1a1a2e,#2d2d5e);box-shadow:0 6px 20px rgba(100,100,200,.2)}
+.card-crafter{background:linear-gradient(135deg,#2d1b0e,#4a2f1a);box-shadow:0 6px 20px rgba(139,90,43,.25)}
+.card-quiz{background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:0 6px 20px rgba(118,75,162,.25)}
+.card-tictac{background:linear-gradient(135deg,#e8f5e9,#a5d6a7);box-shadow:0 6px 20px rgba(76,175,80,.2)}
+
+/* Card Content */
+.card-icon{font-size:clamp(36px,8vw,60px);margin-bottom:4px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+.game-card.wide .card-icon{font-size:clamp(40px,8vw,64px);margin-bottom:0}
+.card-title{font-size:clamp(16px,4vw,24px);font-weight:900;text-align:center;line-height:1.2}
+.card-bonds .card-title{color:#e65100}
+.card-minecraft .card-title,.card-crafter .card-title{color:#e2b714;text-shadow:1px 1px 0 #8b6914}
+.card-quiz .card-title{color:#fff}
+.card-tictac .card-title{color:#2e7d32}
+.card-desc{font-size:clamp(10px,2.2vw,14px);text-align:center;margin-top:2px;opacity:.8;line-height:1.3}
+.card-bonds .card-desc{color:#bf360c}
+.card-minecraft .card-desc,.card-crafter .card-desc{color:#aaaacc}
+.card-quiz .card-desc{color:#e1bee7}
+.card-tictac .card-desc{color:#388e3c}
+.card-badge{display:inline-block;font-size:clamp(8px,1.8vw,11px);padding:1px 8px;border-radius:8px;margin-top:4px;font-weight:700}
+.card-bonds .card-badge{background:#e65100;color:#fff}
+.card-minecraft .card-badge,.card-crafter .card-badge{background:#5c9e5c;color:#fff}
+.card-quiz .card-badge{background:#ffcc02;color:#4a148c}
+.card-tictac .card-badge{background:#2e7d32;color:#fff}
+.game-card.wide .card-badge{margin-top:0}
+
+/* Hover/Glow */
+.game-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.game-card:active::after{opacity:1}
+
+/* ===== FOOTER ===== */
+.footer-wrap{text-align:center;padding:8px 16px 24px;color:#6666aa;font-size:clamp(11px,2.5vw,14px)}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:480px){
+  .grid-wrap{grid-template-columns:repeat(2,1fr)}
+  .game-card.wide{grid-column:1/-1}
+}
+@media(max-height:550px),(orientation:landscape){
+  .header-wrap{padding:clamp(6px,2vh,16px) 12px clamp(2px,1vh,8px)}
+  .header-icon{font-size:clamp(24px,6vh,40px);margin-bottom:1px}
+  .header-h1{font-size:clamp(16px,4vh,28px)}
+  .header-sub{font-size:clamp(9px,2vh,13px);margin-top:1px}
+  .grid-wrap{padding:4px 12px 12px;gap:clamp(4px,1vh,10px);grid-template-columns:repeat(3,1fr)}
+  .game-card{min-height:clamp(80px,20vh,120px);padding:clamp(6px,1.5vh,12px)}
+  .game-card.wide{flex-direction:row;min-height:auto;padding:clamp(4px,1vh,10px)}
+  .card-icon{font-size:clamp(20px,5vh,32px);margin-bottom:1px}
+  .game-card.wide .card-icon{font-size:clamp(24px,5vh,36px)}
+  .card-title{font-size:clamp(10px,2.5vh,16px)}
+  .card-desc{font-size:clamp(7px,1.6vh,11px);margin-top:0}
+  .card-badge{font-size:clamp(6px,1.4vh,9px);padding:0 6px}
+}
+</style>
+</head>
+<body>
+
+<div class="header-wrap">
+  <span class="header-icon">🎮</span>
+  <div class="header-h1">遊戲樂園</div>
+  <div class="header-sub">撳一個遊戲開始玩啦！👇</div>
+</div>
+
+<div class="grid-wrap" id="gameGrid">
+  <!-- Cards injected by JS -->
+</div>
+
+<div class="footer-wrap">
+  Made with ❤️ for Kan's kids
+</div>
+
+<script>
+const GAMES = [
+  {
+    id: 'bonds',
+    icon: '🎯',
+    title: '數字分拆',
+    subtitle: '小小數學家',
+    desc: '學加數 · 攞貼紙 🐣🐰🐱',
+    badge: '4歲+',
+    url: 'https://leeyipkan.github.io/number-bonds/',
+    theme: 'bonds',
+    wide: false,
+  },
+  {
+    id: 'minecraft',
+    icon: '⛏️',
+    title: 'Math History',
+    subtitle: 'Minecraft Adventure',
+    desc: '埃及金字塔 · 羅馬競技場 🏜️🏟️',
+    badge: '6歲+',
+    url: 'https://leeyipkan.github.io/minecraft-math-history/',
+    theme: 'minecraft',
+    wide: false,
+  },
+  {
+    id: 'crafter',
+    icon: '🏗️',
+    title: 'Math Crafter',
+    subtitle: 'Minecraft 數學',
+    desc: 'Minecraft 風格數學遊戲 🧱',
+    badge: '6歲+',
+    url: 'https://leeyipkan.github.io/minecraft-math-crafter/',
+    theme: 'crafter',
+    wide: false,
+  },
+  {
+    id: 'quiz',
+    icon: '🏛️',
+    title: '香港景點',
+    subtitle: '認識香港',
+    desc: '睇相估景點 · 親子問答 🇭🇰',
+    badge: '4歲+',
+    url: 'https://leeyipkan.github.io/hk-landmark-quiz/',
+    theme: 'quiz',
+    wide: false,
+  },
+  {
+    id: 'tictac',
+    icon: '❌',
+    title: '井字過三關',
+    subtitle: 'Tic-Tac-Toe',
+    desc: '經典遊戲 · 同朋友一齊玩 ⭕',
+    badge: '全家',
+    url: 'https://leeyipkan.github.io/tic-tac-toe/',
+    theme: 'tictac',
+    wide: true,
+  },
+]
+
+function buildGrid() {
+  const grid = document.getElementById('gameGrid')
+  GAMES.forEach(g => {
+    const card = document.createElement('div')
+    card.className = `game-card card-${g.theme}`
+    if(g.wide) card.classList.add('wide')
+    
+    // Mouse move glow effect
+    card.onmousemove = function(e) {
+      const r = this.getBoundingClientRect()
+      this.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%')
+      this.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%')
+    }
+    
+    card.onclick = function() {
+      // Click sound
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)()
+        const o = ctx.createOscillator()
+        const g = ctx.createGain()
+        o.type = 'sine'
+        o.frequency.value = 660
+        g.gain.setValueAtTime(0.08, ctx.currentTime)
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08)
+        o.connect(g)
+        g.connect(ctx.destination)
+        o.start()
+        o.stop(ctx.currentTime + 0.08)
+      } catch(_) {}
+      
+      // Navigate after brief feedback
+      card.style.transform = 'scale(0.94)'
+      setTimeout(() => {
+        window.location.href = g.url
+      }, 200)
+    }
+    
+    card.innerHTML = `
+      <div class="card-icon">${g.icon}</div>
+      <div>
+        <div class="card-title">${g.title}</div>
+        <div class="card-desc">${g.desc}</div>
+        <span class="card-badge">${g.badge}</span>
+      </div>
+    `
+    
+    grid.appendChild(card)
+  })
+}
+
+buildGrid()
+console.log('🎮 Game Hub loaded!')
+</script>
+</body>
+</html>
