@@ -54,6 +54,10 @@ html,body{width:100%;min-height:100%;background:linear-gradient(135deg,#0f0c29,#
 .card-quiz .card-badge{background:#ffcc02;color:#4a148c}
 .card-tictac .card-badge{background:#2e7d32;color:#fff}
 .card-snake .card-badge{background:#22c55e;color:#000}
+.card-math{background:linear-gradient(135deg,#0a0a2e,#1a1a5e);box-shadow:0 6px 20px rgba(100,100,255,.2)}
+.card-math .card-title{color:#fbbf24;text-shadow:1px 1px 0 #92400e}
+.card-math .card-desc{color:#88aacc}
+.card-math .card-badge{background:#fbbf24;color:#000}
 .game-card.wide .card-badge{margin-top:0}
 
 /* Hover/Glow */
@@ -166,6 +170,17 @@ const GAMES = [
     badge: '4歲+',
     url: 'https://leeyipkan.github.io/snake-game/',
     theme: 'snake',
+    wide: false,
+  },
+  {
+    id: 'math',
+    icon: '🏝️',
+    title: '數學探險島',
+    subtitle: 'P1 Math Island',
+    desc: '數氣球·釣魚加減·買嘢食 🎈🐟💰',
+    badge: '4-6歲',
+    url: 'https://leeyipkan.github.io/math-island/',
+    theme: 'math',
     wide: false,
   },
 ]
